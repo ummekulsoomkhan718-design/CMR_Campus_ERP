@@ -43,11 +43,46 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  // ==========================================================
+  // COLORS
+  // ==========================================================
+
   static const Color primary = Color(0xFF173F73);
   static const Color accent = Color(0xFF00A896);
 
+  // ==========================================================
+  // VARIABLES
+  // ==========================================================
+
   bool announcementRead = false;
   int selectedCard = -1;
+
+  // FORM
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final TextEditingController nameController =
+  TextEditingController();
+
+  final TextEditingController emailController =
+  TextEditingController();
+
+  final TextEditingController messageController =
+  TextEditingController();
+
+  String selectedCategory = 'Academic Support';
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    messageController.dispose();
+    super.dispose();
+  }
+
+  // ==========================================================
+  // BUILD
+  // ==========================================================
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +187,6 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       children: [
 
-                        // PROFILE AVATAR
                         Container(
                           width: 62,
                           height: 62,
@@ -163,10 +197,7 @@ class _HomePageState extends State<HomePage> {
                           decoration:
                           BoxDecoration(
                             color: Colors.white,
-
-                            shape:
-                            BoxShape.circle,
-
+                            shape: BoxShape.circle,
                             border: Border.all(
                               color: Colors.white,
                               width: 3,
@@ -231,7 +262,6 @@ class _HomePageState extends State<HomePage> {
 
                     const SizedBox(height: 15),
 
-                    // SEMESTER BADGE
                     Container(
                       padding:
                       const EdgeInsets.symmetric(
@@ -282,7 +312,6 @@ class _HomePageState extends State<HomePage> {
 
               const SizedBox(height: 12),
 
-              // MAIN ACADEMIC CONTAINER
               Container(
                 width: double.infinity,
 
@@ -414,7 +443,6 @@ class _HomePageState extends State<HomePage> {
 
                       SizedBox(
                         width: cardWidth,
-
                         child: serviceCard(
                           0,
                           Icons.calendar_month,
@@ -425,7 +453,6 @@ class _HomePageState extends State<HomePage> {
 
                       SizedBox(
                         width: cardWidth,
-
                         child: serviceCard(
                           1,
                           Icons.bar_chart,
@@ -436,7 +463,6 @@ class _HomePageState extends State<HomePage> {
 
                       SizedBox(
                         width: cardWidth,
-
                         child: serviceCard(
                           2,
                           Icons.fact_check,
@@ -447,7 +473,6 @@ class _HomePageState extends State<HomePage> {
 
                       SizedBox(
                         width: cardWidth,
-
                         child: serviceCard(
                           3,
                           Icons.local_library,
@@ -458,7 +483,6 @@ class _HomePageState extends State<HomePage> {
 
                       SizedBox(
                         width: cardWidth,
-
                         child: serviceCard(
                           4,
                           Icons.account_balance_wallet,
@@ -469,7 +493,6 @@ class _HomePageState extends State<HomePage> {
 
                       SizedBox(
                         width: cardWidth,
-
                         child: serviceCard(
                           5,
                           Icons.support_agent,
@@ -553,7 +576,6 @@ class _HomePageState extends State<HomePage> {
 
                     children: [
 
-                      // ANNOUNCEMENT ICON
                       Container(
                         width: 48,
                         height: 48,
@@ -579,8 +601,7 @@ class _HomePageState extends State<HomePage> {
 
                         child: Icon(
                           announcementRead
-                              ? Icons
-                              .mark_email_read
+                              ? Icons.mark_email_read
                               : Icons.campaign,
 
                           color: primary,
@@ -638,7 +659,6 @@ class _HomePageState extends State<HomePage> {
 
                       const SizedBox(width: 8),
 
-                      // STATUS BADGE
                       Container(
                         padding:
                         const EdgeInsets.symmetric(
@@ -725,7 +745,6 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
 
-                    // DATE TILE
                     Container(
                       width: 70,
                       height: 78,
@@ -862,7 +881,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
 
-                    // EVENT BUTTON
                     InkWell(
                       onTap: () {
                         showSnackBar(
@@ -902,7 +920,7 @@ class _HomePageState extends State<HomePage> {
               ),
 
               // ==================================================
-              // ATTENDANCE PROGRESS
+              // ATTENDANCE
               // ==================================================
 
               sectionHeader(
@@ -1032,6 +1050,614 @@ class _HomePageState extends State<HomePage> {
               ),
 
               // ==================================================
+              // ⭐ NEW FORM WIDGET CUSTOMISATION
+              // ==================================================
+
+              sectionHeader(
+                'Student Support Form',
+                'Send a request or feedback to the campus team',
+              ),
+
+              const SizedBox(height: 12),
+
+              Container(
+                width: double.infinity,
+
+                padding:
+                const EdgeInsets.all(20),
+
+                margin:
+                const EdgeInsets.only(
+                  bottom: 26,
+                ),
+
+                decoration:
+                BoxDecoration(
+                  color: Colors.white,
+
+                  borderRadius:
+                  BorderRadius.circular(
+                    22,
+                  ),
+
+                  border: Border.all(
+                    color:
+                    const Color(0xFFD9E2EC),
+                  ),
+
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                      Colors.black.withOpacity(
+                        0.06,
+                      ),
+
+                      blurRadius: 10,
+
+                      offset:
+                      const Offset(0, 4),
+                    ),
+                  ],
+                ),
+
+                // ==================================================
+                // FORM WIDGET
+                // ==================================================
+
+                child: Form(
+                  key: _formKey,
+
+                  child: Column(
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
+
+                    children: [
+
+                      // FORM TITLE
+                      Row(
+                        children: [
+
+                          Container(
+                            width: 48,
+                            height: 48,
+
+                            alignment:
+                            Alignment.center,
+
+                            decoration:
+                            BoxDecoration(
+                              color:
+                              const Color(
+                                0xFFE7F7F3,
+                              ),
+
+                              borderRadius:
+                              BorderRadius.circular(
+                                14,
+                              ),
+                            ),
+
+                            child: const Icon(
+                              Icons.edit_note,
+                              color: accent,
+                              size: 27,
+                            ),
+                          ),
+
+                          const SizedBox(width: 12),
+
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+
+                              children: [
+
+                                Text(
+                                  'Contact Campus Support',
+
+                                  style: TextStyle(
+                                    color: primary,
+                                    fontSize: 17,
+                                    fontWeight:
+                                    FontWeight.bold,
+                                  ),
+                                ),
+
+                                SizedBox(height: 3),
+
+                                Text(
+                                  'Fill in the details below',
+
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // ==================================================
+                      // NAME FIELD
+                      // ==================================================
+
+                      const Text(
+                        'Student Name',
+
+                        style: TextStyle(
+                          color: primary,
+                          fontSize: 13,
+                          fontWeight:
+                          FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 7),
+
+                      TextFormField(
+                        controller: nameController,
+
+                        textInputAction:
+                        TextInputAction.next,
+
+                        decoration:
+                        InputDecoration(
+                          hintText:
+                          'Enter your name',
+
+                          prefixIcon:
+                          const Icon(
+                            Icons.person_outline,
+                            color: primary,
+                          ),
+
+                          filled: true,
+
+                          fillColor:
+                          const Color(
+                            0xFFF4F7FB,
+                          ),
+
+                          border:
+                          OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(
+                              14,
+                            ),
+
+                            borderSide:
+                            BorderSide.none,
+                          ),
+
+                          focusedBorder:
+                          OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(
+                              14,
+                            ),
+
+                            borderSide:
+                            const BorderSide(
+                              color: accent,
+                              width: 2,
+                            ),
+                          ),
+
+                          contentPadding:
+                          const EdgeInsets
+                              .symmetric(
+                            horizontal: 15,
+                            vertical: 15,
+                          ),
+                        ),
+
+                        validator: (value) {
+
+                          if (value == null ||
+                              value.trim().isEmpty) {
+                            return 'Please enter your name';
+                          }
+
+                          if (value.trim().length < 3) {
+                            return 'Name must contain at least 3 characters';
+                          }
+
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // ==================================================
+                      // EMAIL FIELD
+                      // ==================================================
+
+                      const Text(
+                        'Student Email',
+
+                        style: TextStyle(
+                          color: primary,
+                          fontSize: 13,
+                          fontWeight:
+                          FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 7),
+
+                      TextFormField(
+                        controller: emailController,
+
+                        keyboardType:
+                        TextInputType.emailAddress,
+
+                        textInputAction:
+                        TextInputAction.next,
+
+                        decoration:
+                        InputDecoration(
+                          hintText:
+                          'example@cmr.edu.in',
+
+                          prefixIcon:
+                          const Icon(
+                            Icons.email_outlined,
+                            color: primary,
+                          ),
+
+                          filled: true,
+
+                          fillColor:
+                          const Color(
+                            0xFFF4F7FB,
+                          ),
+
+                          border:
+                          OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(
+                              14,
+                            ),
+
+                            borderSide:
+                            BorderSide.none,
+                          ),
+
+                          focusedBorder:
+                          OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(
+                              14,
+                            ),
+
+                            borderSide:
+                            const BorderSide(
+                              color: accent,
+                              width: 2,
+                            ),
+                          ),
+
+                          contentPadding:
+                          const EdgeInsets
+                              .symmetric(
+                            horizontal: 15,
+                            vertical: 15,
+                          ),
+                        ),
+
+                        validator: (value) {
+
+                          if (value == null ||
+                              value.trim().isEmpty) {
+                            return 'Please enter your email';
+                          }
+
+                          if (!value.contains('@') ||
+                              !value.contains('.')) {
+                            return 'Please enter a valid email';
+                          }
+
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // ==================================================
+                      // CATEGORY DROPDOWN
+                      // ==================================================
+
+                      const Text(
+                        'Request Category',
+
+                        style: TextStyle(
+                          color: primary,
+                          fontSize: 13,
+                          fontWeight:
+                          FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 7),
+
+                      DropdownButtonFormField<String>(
+                        value: selectedCategory,
+
+                        decoration:
+                        InputDecoration(
+                          prefixIcon:
+                          const Icon(
+                            Icons.category_outlined,
+                            color: primary,
+                          ),
+
+                          filled: true,
+
+                          fillColor:
+                          const Color(
+                            0xFFF4F7FB,
+                          ),
+
+                          border:
+                          OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(
+                              14,
+                            ),
+
+                            borderSide:
+                            BorderSide.none,
+                          ),
+
+                          focusedBorder:
+                          OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(
+                              14,
+                            ),
+
+                            borderSide:
+                            const BorderSide(
+                              color: accent,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+
+                        items: const [
+
+                          DropdownMenuItem(
+                            value:
+                            'Academic Support',
+
+                            child: Text(
+                              'Academic Support',
+                            ),
+                          ),
+
+                          DropdownMenuItem(
+                            value:
+                            'Technical Issue',
+
+                            child: Text(
+                              'Technical Issue',
+                            ),
+                          ),
+
+                          DropdownMenuItem(
+                            value:
+                            'Library',
+
+                            child: Text(
+                              'Library',
+                            ),
+                          ),
+
+                          DropdownMenuItem(
+                            value:
+                            'Fees',
+
+                            child: Text(
+                              'Fees',
+                            ),
+                          ),
+
+                          DropdownMenuItem(
+                            value:
+                            'General Feedback',
+
+                            child: Text(
+                              'General Feedback',
+                            ),
+                          ),
+                        ],
+
+                        onChanged: (value) {
+
+                          if (value != null) {
+                            setState(() {
+                              selectedCategory =
+                                  value;
+                            });
+                          }
+                        },
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // ==================================================
+                      // MESSAGE FIELD
+                      // ==================================================
+
+                      const Text(
+                        'Message / Feedback',
+
+                        style: TextStyle(
+                          color: primary,
+                          fontSize: 13,
+                          fontWeight:
+                          FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 7),
+
+                      TextFormField(
+                        controller:
+                        messageController,
+
+                        maxLines: 4,
+
+                        keyboardType:
+                        TextInputType.multiline,
+
+                        decoration:
+                        InputDecoration(
+                          hintText:
+                          'Write your message here...',
+
+                          prefixIcon:
+                          const Padding(
+                            padding:
+                            EdgeInsets.only(
+                              bottom: 65,
+                            ),
+
+                            child: Icon(
+                              Icons
+                                  .chat_bubble_outline,
+                              color: primary,
+                            ),
+                          ),
+
+                          filled: true,
+
+                          fillColor:
+                          const Color(
+                            0xFFF4F7FB,
+                          ),
+
+                          border:
+                          OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(
+                              14,
+                            ),
+
+                            borderSide:
+                            BorderSide.none,
+                          ),
+
+                          focusedBorder:
+                          OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(
+                              14,
+                            ),
+
+                            borderSide:
+                            const BorderSide(
+                              color: accent,
+                              width: 2,
+                            ),
+                          ),
+
+                          contentPadding:
+                          const EdgeInsets.all(
+                            15,
+                          ),
+                        ),
+
+                        validator: (value) {
+
+                          if (value == null ||
+                              value.trim().isEmpty) {
+                            return 'Please enter your message';
+                          }
+
+                          if (value.trim().length < 10) {
+                            return 'Message should contain at least 10 characters';
+                          }
+
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // ==================================================
+                      // SUBMIT BUTTON
+                      // ==================================================
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 52,
+
+                        child: ElevatedButton.icon(
+                          onPressed: submitForm,
+
+                          icon: const Icon(
+                            Icons.send,
+                            color: Colors.white,
+                          ),
+
+                          label: const Text(
+                            'Submit Request',
+
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight:
+                              FontWeight.bold,
+                            ),
+                          ),
+
+                          style:
+                          ElevatedButton.styleFrom(
+                            backgroundColor:
+                            primary,
+
+                            foregroundColor:
+                            Colors.white,
+
+                            elevation: 2,
+
+                            shape:
+                            RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.circular(
+                                14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      const Center(
+                        child: Text(
+                          'Your information is used only for campus support.',
+                          textAlign:
+                          TextAlign.center,
+
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // ==================================================
               // FOOTER
               // ==================================================
 
@@ -1103,6 +1729,34 @@ class _HomePageState extends State<HomePage> {
   }
 
   // ============================================================
+  // FORM SUBMISSION
+  // ============================================================
+
+  void submitForm() {
+
+    // Validate the complete form
+    if (_formKey.currentState!.validate()) {
+
+      // Close keyboard
+      FocusScope.of(context).unfocus();
+
+      showSnackBar(
+        'Request submitted successfully!',
+      );
+
+      // Clear form after submission
+      nameController.clear();
+      emailController.clear();
+      messageController.clear();
+
+      setState(() {
+        selectedCategory =
+        'Academic Support';
+      });
+    }
+  }
+
+  // ============================================================
   // SECTION HEADER
   // ============================================================
 
@@ -1151,7 +1805,6 @@ class _HomePageState extends State<HomePage> {
       Color background,
       ) {
     return Container(
-      // Increased from 105 to 125 to prevent overflow
       height: 125,
 
       padding:
@@ -1227,6 +1880,7 @@ class _HomePageState extends State<HomePage> {
       String title,
       String subtitle,
       ) {
+
     bool selected =
         selectedCard == index;
 
