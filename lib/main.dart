@@ -86,6 +86,8 @@ class AppRoutes {
   static const profile = '/profile';
   static const supportForm = '/support-form';
   static const requests = '/requests';
+  static const requestRecords = '/request-records';
+  static const reports = '/reports';
 }
 
 // ============================================================
@@ -296,6 +298,8 @@ class _CMRConnectAppState extends State<CMRConnectApp> {
         ),
         AppRoutes.supportForm: (_) => const SupportFormScreen(),
         AppRoutes.requests: (_) => const RequestsScreen(),
+        AppRoutes.requestRecords: (_) => const RequestRecordsScreen(),
+        AppRoutes.reports: (_) => const RequestReportsScreen(),
       },
     );
   }
@@ -338,7 +342,7 @@ class SectionTitle extends StatelessWidget {
                     .textTheme
                     .bodyMedium
                     ?.color
-                    ?.withOpacity(.65),
+                    ?.withValues(alpha: .65),
               ),
             ),
           ],
@@ -437,6 +441,16 @@ class CMRConnectDrawer extends StatelessWidget {
                     icon: Icons.receipt_long_outlined,
                     title: 'My Requests',
                     onTap: () => _navigate(context, AppRoutes.requests),
+                  ),
+                  _DrawerItem(
+                    icon: Icons.table_view_outlined,
+                    title: 'Request Records',
+                    onTap: () => _navigate(context, AppRoutes.requestRecords),
+                  ),
+                  _DrawerItem(
+                    icon: Icons.analytics_outlined,
+                    title: 'Reports & Analytics',
+                    onTap: () => _navigate(context, AppRoutes.reports),
                   ),
                   _DrawerItem(
                     icon: Icons.person_outline,
@@ -683,7 +697,7 @@ class HomeScreen extends StatelessWidget {
                 child: ListTile(
                   leading: CircleAvatar(
                     backgroundColor:
-                    CMRConnectApp.accent.withOpacity(.15),
+                    CMRConnectApp.accent.withValues(alpha: .15),
                     child: const Icon(
                       Icons.support_agent,
                       color: CMRConnectApp.accent,
@@ -842,7 +856,7 @@ class DashboardCard extends StatelessWidget {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(.12),
+                  color: color.withValues(alpha: .12),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -899,7 +913,7 @@ class TimetableScreen extends StatelessWidget {
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: classes.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 10),
+        separatorBuilder: (_, _) => const SizedBox(height: 10),
         itemBuilder: (context, index) {
           final item = classes[index];
 
@@ -909,7 +923,7 @@ class TimetableScreen extends StatelessWidget {
               contentPadding: const EdgeInsets.all(14),
               leading: CircleAvatar(
                 backgroundColor:
-                CMRConnectApp.primary.withOpacity(.12),
+                CMRConnectApp.primary.withValues(alpha: .12),
                 child: const Icon(
                   Icons.schedule,
                   color: CMRConnectApp.primary,
@@ -950,7 +964,7 @@ class ServicesScreen extends StatelessWidget {
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: campusServices.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 10),
+        separatorBuilder: (_, _) => const SizedBox(height: 10),
         itemBuilder: (context, index) {
           final service = campusServices[index];
 
@@ -960,7 +974,7 @@ class ServicesScreen extends StatelessWidget {
               contentPadding: const EdgeInsets.all(14),
               leading: CircleAvatar(
                 radius: 27,
-                backgroundColor: service.color.withOpacity(.12),
+                backgroundColor: service.color.withValues(alpha: .12),
                 child: Icon(
                   service.icon,
                   color: service.color,
@@ -1025,7 +1039,7 @@ class ServiceDetailScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 45,
-              backgroundColor: service.color.withOpacity(.12),
+              backgroundColor: service.color.withValues(alpha: .12),
               child: Icon(
                 service.icon,
                 color: service.color,
@@ -1089,7 +1103,7 @@ class EventsScreen extends StatelessWidget {
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: campusEvents.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 10),
+        separatorBuilder: (_, _) => const SizedBox(height: 10),
         itemBuilder: (context, index) {
           final event = campusEvents[index];
 
@@ -1101,7 +1115,7 @@ class EventsScreen extends StatelessWidget {
                 width: 55,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: CMRConnectApp.primary.withOpacity(.1),
+                  color: CMRConnectApp.primary.withValues(alpha: .1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -1873,7 +1887,7 @@ class _SupportFormScreenState
 
                   decoration: BoxDecoration(
                     color: CMRConnectApp.primary
-                        .withOpacity(.08),
+                        .withValues(alpha: .08),
 
                     borderRadius:
                     BorderRadius.circular(17),
@@ -2150,7 +2164,7 @@ class _SupportFormScreenState
 
                 DropdownButtonFormField<
                     String>(
-                  value:
+                  initialValue:
                   _selectedCategory,
 
                   decoration:
@@ -2336,124 +2350,90 @@ class _SupportFormScreenState
                   },
 
                   builder: (field) {
-                    return Column(
-                      children: [
-                        RadioListTile<String>(
-                          contentPadding:
-                          EdgeInsets.zero,
+                    return RadioGroup<String>(
+                        groupValue: _selectedUrgency,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedUrgency = value;
+                          });
+                          field.didChange(value);
+                        },
+                        child: Column(
+                          children: [
+                            RadioListTile<String>(
+                              contentPadding:
+                              EdgeInsets.zero,
 
-                          title:
-                          const Text(
-                            'Low',
-                          ),
-
-                          subtitle:
-                          const Text(
-                            'Can be handled within a week',
-                          ),
-
-                          value: 'Low',
-
-                          groupValue:
-                          _selectedUrgency,
-
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedUrgency =
-                                  value;
-                            });
-
-                            field.didChange(
-                              value,
-                            );
-                          },
-                        ),
-
-                        RadioListTile<String>(
-                          contentPadding:
-                          EdgeInsets.zero,
-
-                          title:
-                          const Text(
-                            'Normal',
-                          ),
-
-                          subtitle:
-                          const Text(
-                            'Needed within a few days',
-                          ),
-
-                          value: 'Normal',
-
-                          groupValue:
-                          _selectedUrgency,
-
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedUrgency =
-                                  value;
-                            });
-
-                            field.didChange(
-                              value,
-                            );
-                          },
-                        ),
-
-                        RadioListTile<String>(
-                          contentPadding:
-                          EdgeInsets.zero,
-
-                          title:
-                          const Text(
-                            'High',
-                          ),
-
-                          subtitle:
-                          const Text(
-                            'Requires prompt attention',
-                          ),
-
-                          value: 'High',
-
-                          groupValue:
-                          _selectedUrgency,
-
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedUrgency =
-                                  value;
-                            });
-
-                            field.didChange(
-                              value,
-                            );
-                          },
-                        ),
-
-                        if (field.hasError)
-                          Align(
-                            alignment:
-                            Alignment
-                                .centerLeft,
-
-                            child: Text(
-                              field.errorText!,
-                              style:
-                              TextStyle(
-                                color:
-                                Theme.of(
-                                  context,
-                                )
-                                    .colorScheme
-                                    .error,
-
-                                fontSize: 12,
+                              title:
+                              const Text(
+                                'Low',
                               ),
+
+                              subtitle:
+                              const Text(
+                                'Can be handled within a week',
+                              ),
+
+                              value: 'Low',
                             ),
-                          ),
-                      ],
-                    );
+
+                            RadioListTile<String>(
+                              contentPadding:
+                              EdgeInsets.zero,
+
+                              title:
+                              const Text(
+                                'Normal',
+                              ),
+
+                              subtitle:
+                              const Text(
+                                'Needed within a few days',
+                              ),
+
+                              value: 'Normal',
+                            ),
+
+                            RadioListTile<String>(
+                              contentPadding:
+                              EdgeInsets.zero,
+
+                              title:
+                              const Text(
+                                'High',
+                              ),
+
+                              subtitle:
+                              const Text(
+                                'Requires prompt attention',
+                              ),
+
+                              value: 'High',
+                            ),
+
+                            if (field.hasError)
+                              Align(
+                                alignment:
+                                Alignment
+                                    .centerLeft,
+
+                                child: Text(
+                                  field.errorText!,
+                                  style:
+                                  TextStyle(
+                                    color:
+                                    Theme.of(
+                                      context,
+                                    )
+                                        .colorScheme
+                                        .error,
+
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ));
                   },
                 ),
 
@@ -2492,83 +2472,63 @@ class _SupportFormScreenState
                   },
 
                   builder: (field) {
-                    return Column(
-                      children: [
-                        RadioListTile<String>(
-                          contentPadding:
-                          EdgeInsets.zero,
+                    return RadioGroup<String>(
+                        groupValue: _selectedContact,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedContact = value;
+                          });
+                          field.didChange(value);
+                        },
+                        child: Column(
+                          children: [
+                            RadioListTile<String>(
+                              contentPadding:
+                              EdgeInsets.zero,
 
-                          title:
-                          const Text(
-                            'Email',
-                          ),
-
-                          value: 'Email',
-
-                          groupValue:
-                          _selectedContact,
-
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedContact =
-                                  value;
-                            });
-
-                            field.didChange(
-                              value,
-                            );
-                          },
-                        ),
-
-                        RadioListTile<String>(
-                          contentPadding:
-                          EdgeInsets.zero,
-
-                          title:
-                          const Text(
-                            'Phone',
-                          ),
-
-                          value: 'Phone',
-
-                          groupValue:
-                          _selectedContact,
-
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedContact =
-                                  value;
-                            });
-
-                            field.didChange(
-                              value,
-                            );
-                          },
-                        ),
-
-                        if (field.hasError)
-                          Align(
-                            alignment:
-                            Alignment
-                                .centerLeft,
-
-                            child: Text(
-                              field.errorText!,
-                              style:
-                              TextStyle(
-                                color:
-                                Theme.of(
-                                  context,
-                                )
-                                    .colorScheme
-                                    .error,
-
-                                fontSize: 12,
+                              title:
+                              const Text(
+                                'Email',
                               ),
+
+                              value: 'Email',
                             ),
-                          ),
-                      ],
-                    );
+
+                            RadioListTile<String>(
+                              contentPadding:
+                              EdgeInsets.zero,
+
+                              title:
+                              const Text(
+                                'Phone',
+                              ),
+
+                              value: 'Phone',
+                            ),
+
+                            if (field.hasError)
+                              Align(
+                                alignment:
+                                Alignment
+                                    .centerLeft,
+
+                                child: Text(
+                                  field.errorText!,
+                                  style:
+                                  TextStyle(
+                                    color:
+                                    Theme.of(
+                                      context,
+                                    )
+                                        .colorScheme
+                                        .error,
+
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ));
                   },
                 ),
 
@@ -2766,7 +2726,7 @@ class _SupportFormScreenState
                   Card(
                     elevation: 0,
                     color: CMRConnectApp.accent
-                        .withOpacity(.10),
+                        .withValues(alpha: .10),
 
                     child: ListTile(
                       leading:
@@ -3060,7 +3020,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
               return ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemCount: docs.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                separatorBuilder: (_, _) => const SizedBox(height: 10),
                 itemBuilder: (context, index) {
                   final doc = docs[index];
                   final data = doc.data();
@@ -3073,7 +3033,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(14),
                       leading: CircleAvatar(
-                        backgroundColor: CMRConnectApp.primary.withOpacity(.1),
+                        backgroundColor: CMRConnectApp.primary.withValues(alpha: .1),
                         child: const Icon(
                           Icons.receipt_long_outlined,
                           color: CMRConnectApp.primary,
@@ -3106,6 +3066,461 @@ class _RequestsScreenState extends State<RequestsScreen> {
             },
           );
         },
+      ),
+    );
+  }
+}
+
+// ============================================================
+// REQUEST RECORDS: LIVE FIRESTORE RECORDS
+// ============================================================
+
+class RequestRecordsScreen extends StatefulWidget {
+  const RequestRecordsScreen({super.key});
+
+  @override
+  State<RequestRecordsScreen> createState() => _RequestRecordsScreenState();
+}
+
+class _RequestRecordsScreenState extends State<RequestRecordsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _selectedStatus = 'All statuses';
+  String _selectedCategory = 'All categories';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  DateTime _dateOf(Map<String, dynamic> data) {
+    final value = data['createdAt'];
+    if (value is Timestamp) return value.toDate();
+    return DateTime.fromMillisecondsSinceEpoch(0);
+  }
+
+  String _dateLabel(Map<String, dynamic> data) {
+    final date = _dateOf(data);
+    if (date.millisecondsSinceEpoch == 0) return 'Pending timestamp';
+    return '${date.day.toString().padLeft(2, '0')}/'
+        '${date.month.toString().padLeft(2, '0')}/${date.year}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stream = FirebaseFirestore.instance
+        .collection('campusRequests')
+        .snapshots();
+
+    return Scaffold(
+      drawer: const CMRConnectDrawer(),
+      appBar: AppBar(
+        title: const Text('Request Records'),
+        actions: [
+          IconButton(
+            tooltip: 'Refresh records',
+            onPressed: () => setState(() {}),
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: stream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return _FirestoreErrorPanel(
+              title: 'Could not load request records',
+              message: 'Check your internet connection and Firestore security rules. '
+                  'This page reads the shared campusRequests collection, so your rules '
+                  'must allow authorised staff to read all records.\n\n${snapshot.error}',
+              onRetry: () => setState(() {}),
+            );
+          }
+
+          final docs = [...?snapshot.data?.docs];
+          docs.sort((a, b) => _dateOf(b.data()).compareTo(_dateOf(a.data())));
+          final categories = <String>{
+            'All categories',
+            ...docs.map((d) => d.data()['serviceCategory']?.toString() ?? 'Other'),
+          }.toList();
+          final statuses = <String>{
+            'All statuses',
+            ...docs.map((d) => d.data()['status']?.toString() ?? 'submitted'),
+          }.toList();
+          final query = _searchController.text.trim().toLowerCase();
+          final filtered = docs.where((doc) {
+            final data = doc.data();
+            final category = data['serviceCategory']?.toString() ?? 'Other';
+            final status = data['status']?.toString() ?? 'submitted';
+            final searchText = [
+              doc.id,
+              data['studentName'],
+              data['studentId'],
+              data['subject'],
+              data['email'],
+              category,
+              status,
+            ].map((value) => value?.toString() ?? '').join(' ').toLowerCase();
+            return (_selectedCategory == 'All categories' || category == _selectedCategory) &&
+                (_selectedStatus == 'All statuses' || status == _selectedStatus) &&
+                (query.isEmpty || searchText.contains(query));
+          }).toList();
+
+          return Column(
+            children: [
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: CMRConnectApp.accent.withValues(alpha: .10),
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: CMRConnectApp.accent.withValues(alpha: .25)),
+                ),
+                child: Wrap(
+                  spacing: 18,
+                  runSpacing: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    const Icon(Icons.cloud_done_outlined, color: CMRConnectApp.accent, size: 28),
+                    Text('${docs.length} saved requests', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    const Text('Live data from Cloud Firestore'),
+                    Text('${filtered.length} shown', style: const TextStyle(color: Colors.grey)),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search student, reference, subject...',
+                        suffixIcon: IconButton(
+                          tooltip: 'Clear search',
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {});
+                          },
+                          icon: const Icon(Icons.close),
+                        ),
+                      ),
+                      onChanged: (_) => setState(() {}),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            initialValue: _selectedCategory,
+                            isExpanded: true,
+                            decoration: const InputDecoration(labelText: 'Category'),
+                            items: categories.map((v) => DropdownMenuItem(value: v, child: Text(v, overflow: TextOverflow.ellipsis))).toList(),
+                            onChanged: (v) => setState(() => _selectedCategory = v ?? 'All categories'),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            initialValue: _selectedStatus,
+                            isExpanded: true,
+                            decoration: const InputDecoration(labelText: 'Status'),
+                            items: statuses.map((v) => DropdownMenuItem(value: v, child: Text(v, overflow: TextOverflow.ellipsis))).toList(),
+                            onChanged: (v) => setState(() => _selectedStatus = v ?? 'All statuses'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: filtered.isEmpty
+                    ? const Center(child: Text('No matching requests found.'))
+                    : ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
+                  itemCount: filtered.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    final doc = filtered[index];
+                    final data = doc.data();
+                    final status = data['status']?.toString() ?? 'submitted';
+                    return Card(
+                      elevation: 0,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(14),
+                        leading: CircleAvatar(
+                          backgroundColor: CMRConnectApp.primary.withValues(alpha: .10),
+                          child: const Icon(Icons.receipt_long_outlined, color: CMRConnectApp.primary),
+                        ),
+                        title: Text(data['subject']?.toString() ?? 'Campus request', style: const TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(top: 6),
+                          child: Text(
+                            'Student: ${data['studentName'] ?? 'Not provided'}'
+                                '\nService: ${data['serviceCategory'] ?? 'Other'}'
+                                '\nUrgency: ${data['urgency'] ?? 'Normal'} • Status: $status'
+                                '\nDate: ${_dateLabel(data)}'
+                                '\nReference: ${doc.id}',
+                          ),
+                        ),
+                        isThreeLine: true,
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => RequestSummaryScreen(requestId: doc.id)),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ============================================================
+// REQUEST REPORTS: LIVE AGGREGATES FROM FIRESTORE
+// ============================================================
+
+class RequestReportsScreen extends StatelessWidget {
+  const RequestReportsScreen({super.key});
+
+  String _labelDate(dynamic value) {
+    if (value is! Timestamp) return 'Not available';
+    final date = value.toDate();
+    return '${date.day.toString().padLeft(2, '0')}/'
+        '${date.month.toString().padLeft(2, '0')}/${date.year}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: const CMRConnectDrawer(),
+      appBar: AppBar(
+        title: const Text('Reports & Analytics'),
+      ),
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance.collection('campusRequests').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return _FirestoreErrorPanel(
+              title: 'Could not generate reports',
+              message: 'Reports are generated from the live campusRequests collection. '
+                  'Check your internet connection and Firestore rules. Only authorised staff '
+                  'should be allowed to read all student records.\n\n${snapshot.error}',
+            );
+          }
+
+          final docs = [...?snapshot.data?.docs];
+          final total = docs.length;
+          final byCategory = <String, int>{};
+          final byStatus = <String, int>{};
+          final byUrgency = <String, int>{};
+          var recentCount = 0;
+          final now = DateTime.now();
+          for (final doc in docs) {
+            final data = doc.data();
+            final category = data['serviceCategory']?.toString() ?? 'Other';
+            final status = data['status']?.toString() ?? 'submitted';
+            final urgency = data['urgency']?.toString() ?? 'Normal';
+            byCategory[category] = (byCategory[category] ?? 0) + 1;
+            byStatus[status] = (byStatus[status] ?? 0) + 1;
+            byUrgency[urgency] = (byUrgency[urgency] ?? 0) + 1;
+            final createdAt = data['createdAt'];
+            if (createdAt is Timestamp && now.difference(createdAt.toDate()).inDays < 7) {
+              recentCount++;
+            }
+          }
+
+          return ListView(
+            padding: const EdgeInsets.all(18),
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [Color(0xFF173F73), Color(0xFF2C69A6)]),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.analytics_outlined, color: Colors.white, size: 34),
+                    SizedBox(height: 12),
+                    Text('Campus Service Reports', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                    SizedBox(height: 5),
+                    Text('Automatically calculated from Cloud Firestore records.', style: TextStyle(color: Colors.white70)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              LayoutBuilder(builder: (context, constraints) {
+                final columns = constraints.maxWidth >= 850 ? 4 : 2;
+                final cards = <Widget>[
+                  _ReportMetric(title: 'Total Requests', value: '$total', icon: Icons.inbox_outlined, color: CMRConnectApp.primary),
+                  _ReportMetric(title: 'Submitted', value: '${byStatus['submitted'] ?? 0}', icon: Icons.outgoing_mail, color: CMRConnectApp.accent),
+                  _ReportMetric(title: 'High Urgency', value: '${byUrgency['High'] ?? 0}', icon: Icons.priority_high, color: Colors.deepOrange),
+                  _ReportMetric(title: 'Last 7 Days', value: '$recentCount', icon: Icons.date_range, color: const Color(0xFF7B4B94)),
+                ];
+                return GridView.count(
+                  crossAxisCount: columns,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: constraints.maxWidth >= 850 ? 1.8 : 1.45,
+                  children: cards,
+                );
+              }),
+              const SizedBox(height: 22),
+              const SectionTitle(title: 'Requests by Service Category', subtitle: 'Live breakdown of submitted campus requests'),
+              _ReportBreakdown(values: byCategory, total: total),
+              const SizedBox(height: 22),
+              const SectionTitle(title: 'Requests by Status'),
+              _ReportBreakdown(values: byStatus, total: total),
+              const SizedBox(height: 22),
+              const SectionTitle(title: 'Requests by Urgency'),
+              _ReportBreakdown(values: byUrgency, total: total),
+              const SizedBox(height: 22),
+              const SectionTitle(title: 'Latest Requests', subtitle: 'Most recent records in Firestore'),
+              ...([...docs]..sort((a, b) {
+                final av = a.data()['createdAt'];
+                final bv = b.data()['createdAt'];
+                final ad = av is Timestamp ? av.toDate() : DateTime.fromMillisecondsSinceEpoch(0);
+                final bd = bv is Timestamp ? bv.toDate() : DateTime.fromMillisecondsSinceEpoch(0);
+                return bd.compareTo(ad);
+              })).take(5).map((doc) {
+                final data = doc.data();
+                return Card(
+                  elevation: 0,
+                  child: ListTile(
+                    leading: const Icon(Icons.receipt_long_outlined),
+                    title: Text(data['subject']?.toString() ?? 'Campus request'),
+                    subtitle: Text('${data['serviceCategory'] ?? 'Other'} • ${_labelDate(data['createdAt'])}'),
+                    trailing: Text(data['status']?.toString() ?? 'submitted'),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => RequestSummaryScreen(requestId: doc.id))),
+                  ),
+                );
+              }),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ReportMetric extends StatelessWidget {
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const _ReportMetric({required this.title, required this.value, required this.icon, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color),
+            const SizedBox(height: 9),
+            Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            Text(title, style: const TextStyle(color: Colors.grey), maxLines: 2, overflow: TextOverflow.ellipsis),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ReportBreakdown extends StatelessWidget {
+  final Map<String, int> values;
+  final int total;
+
+  const _ReportBreakdown({required this.values, required this.total});
+
+  @override
+  Widget build(BuildContext context) {
+    if (values.isEmpty) {
+      return const Card(elevation: 0, child: Padding(padding: EdgeInsets.all(18), child: Text('No data available yet.')));
+    }
+    final entries = values.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    return Card(
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: entries.map((entry) {
+            final fraction = total == 0 ? 0.0 : entry.value / total;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(child: Text(entry.key, style: const TextStyle(fontWeight: FontWeight.w500))),
+                      Text('${entry.value}  (${(fraction * 100).round()}%)', style: const TextStyle(color: Colors.grey)),
+                    ],
+                  ),
+                  const SizedBox(height: 7),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: LinearProgressIndicator(value: fraction, minHeight: 8, backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+class _FirestoreErrorPanel extends StatelessWidget {
+  final String title;
+  final String message;
+  final VoidCallback? onRetry;
+
+  const _FirestoreErrorPanel({required this.title, required this.message, this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.cloud_off, size: 54),
+            const SizedBox(height: 12),
+            Text(title, style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+            const SizedBox(height: 10),
+            Text(message, textAlign: TextAlign.center),
+            if (onRetry != null) ...[
+              const SizedBox(height: 16),
+              FilledButton.icon(onPressed: onRetry, icon: const Icon(Icons.refresh), label: const Text('Try Again')),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -3290,7 +3705,7 @@ class _RequestSummaryScreenState
 
                 color:
                 CMRConnectApp.accent
-                    .withOpacity(.10),
+                    .withValues(alpha: .10),
 
                 child: const ListTile(
                   leading: Icon(
