@@ -83,6 +83,7 @@ class AppRoutes {
   static const timetable = '/timetable';
   static const services = '/services';
   static const events = '/events';
+  static const announcements = '/announcements';
   static const profile = '/profile';
   static const supportForm = '/support-form';
   static const requests = '/requests';
@@ -130,15 +131,52 @@ class CampusEvent {
   });
 }
 
+class Announcement {
+  final String id;
+  final String title;
+  final String category;
+  final String date;
+  final String preview;
+  final String detail;
+  final IconData icon;
+
+  const Announcement({
+    required this.id,
+    required this.title,
+    required this.category,
+    required this.date,
+    required this.preview,
+    required this.detail,
+    required this.icon,
+  });
+}
+
 // ============================================================
 // SAMPLE DATA
 // ============================================================
 
 const List<CampusService> campusServices = [
   CampusService(
-    name: 'Accommodation Office',
-    description:
-    'Get help with hostel applications, room allocation, maintenance requests and accommodation enquiries.',
+    name: 'Library',
+    description: 'Find books, use digital learning resources, borrow materials and access quiet study spaces.',
+    location: 'Central Library',
+    openingHours: '8:00 AM - 8:00 PM',
+    contact: 'library@cmr.edu.in',
+    icon: Icons.local_library_outlined,
+    color: Color(0xFF3A7D44),
+  ),
+  CampusService(
+    name: 'Counselling',
+    description: 'Access confidential wellbeing support, counselling information and guidance for student concerns.',
+    location: 'Student Wellness Centre',
+    openingHours: '9:00 AM - 5:00 PM',
+    contact: 'wellness@cmr.edu.in',
+    icon: Icons.favorite_outline,
+    color: Color(0xFFE76F51),
+  ),
+  CampusService(
+    name: 'Accommodation',
+    description: 'Get help with hostel applications, room allocation, maintenance requests and accommodation enquiries.',
     location: 'Student Centre, Level 2',
     openingHours: '8:30 AM - 5:00 PM',
     contact: 'accommodation@cmr.edu.in',
@@ -146,45 +184,43 @@ const List<CampusService> campusServices = [
     color: Color(0xFF173F73),
   ),
   CampusService(
-    name: 'Academic Support',
-    description:
-    'Receive academic guidance, course registration assistance and academic planning support.',
-    location: 'Academic Block, Room 204',
+    name: 'Career Services',
+    description: 'Get support with resumes, interview preparation, internships, placements and career planning.',
+    location: 'Career Development Office',
     openingHours: '9:00 AM - 4:30 PM',
-    contact: 'academics@cmr.edu.in',
-    icon: Icons.school_outlined,
+    contact: 'careers@cmr.edu.in',
+    icon: Icons.work_outline,
     color: Color(0xFF00A896),
   ),
   CampusService(
-    name: 'IT Help Desk',
-    description:
-    'Get assistance with Wi-Fi, student portals, computer labs, passwords and technical issues.',
+    name: 'Sports',
+    description: 'Learn about sports facilities, team activities, fitness spaces and upcoming campus competitions.',
+    location: 'Sports Complex',
+    openingHours: '6:00 AM - 7:00 PM',
+    contact: 'sports@cmr.edu.in',
+    icon: Icons.sports_basketball_outlined,
+    color: Color(0xFFB7791F),
+  ),
+  CampusService(
+    name: 'IT Helpdesk',
+    description: 'Get assistance with Wi-Fi, student portals, computer labs, passwords and technical issues.',
     location: 'Digital Learning Centre',
     openingHours: '8:00 AM - 6:00 PM',
     contact: 'ithelp@cmr.edu.in',
     icon: Icons.computer_outlined,
     color: Color(0xFF7B4B94),
   ),
-  CampusService(
-    name: 'Student Wellness',
-    description:
-    'Access student wellbeing resources, counselling information and general support services.',
-    location: 'Wellness Centre',
-    openingHours: '9:00 AM - 5:00 PM',
-    contact: 'wellness@cmr.edu.in',
-    icon: Icons.favorite_outline,
-    color: Color(0xFFE76F51),
-  ),
-  CampusService(
-    name: 'Library Services',
-    description:
-    'Find information about books, digital resources, borrowing and study spaces.',
-    location: 'Central Library',
-    openingHours: '8:00 AM - 8:00 PM',
-    contact: 'library@cmr.edu.in',
-    icon: Icons.local_library_outlined,
-    color: Color(0xFF3A7D44),
-  ),
+];
+
+const List<Announcement> campusAnnouncements = [
+  Announcement(id: 'ann-001', title: 'Semester Registration Reminder', category: 'Academic', date: '27 October 2026', preview: 'Review your registered subjects before the deadline.', detail: 'Demonstration data: Students should review their registered subjects and contact the academic office if any information needs correction. Check official university channels for actual deadlines.', icon: Icons.school_outlined),
+  Announcement(id: 'ann-002', title: 'Library Hours Update', category: 'Library', date: '26 October 2026', preview: 'Plan your study sessions around the library schedule.', detail: 'Demonstration data: Check library opening hours before visiting. Confirm current timings with the library team.', icon: Icons.local_library_outlined),
+  Announcement(id: 'ann-003', title: 'Career Preparation Workshop', category: 'Career', date: '25 October 2026', preview: 'Prepare your resume and practise interview skills.', detail: 'Demonstration data: A sample career workshop covering resume preparation, interview practice and placement readiness. Check official campus channels for real event details.', icon: Icons.work_outline),
+  Announcement(id: 'ann-004', title: 'Campus Wi-Fi Support', category: 'IT Support', date: '24 October 2026', preview: 'Find out where to report connectivity problems.', detail: 'Demonstration data: Students experiencing Wi-Fi or portal issues can contact the campus IT Helpdesk. Include a short description of the issue when requesting assistance.', icon: Icons.wifi_outlined),
+  Announcement(id: 'ann-005', title: 'Student Wellness Resources', category: 'Wellbeing', date: '23 October 2026', preview: 'Explore available student support resources.', detail: 'Demonstration data: Students can contact the student wellness team to ask about counselling and wellbeing resources.', icon: Icons.favorite_outline),
+  Announcement(id: 'ann-006', title: 'Sports Club Registrations', category: 'Sports', date: '22 October 2026', preview: 'Explore sports clubs and campus activities.', detail: 'Demonstration data: Students interested in sports can contact the sports office to ask about club activities, facilities and registration.', icon: Icons.sports_basketball_outlined),
+  Announcement(id: 'ann-007', title: 'Accommodation Maintenance', category: 'Accommodation', date: '21 October 2026', preview: 'Report hostel maintenance concerns through support.', detail: 'Demonstration data: Students can report maintenance concerns to the accommodation office and provide room or location details.', icon: Icons.home_work_outlined),
+  Announcement(id: 'ann-008', title: 'Upcoming Student Activities', category: 'Campus Life', date: '20 October 2026', preview: 'Keep an eye on campus events and student activities.', detail: 'Demonstration data: Check official campus channels for upcoming clubs, activities and events.', icon: Icons.campaign_outlined),
 ];
 
 const List<CampusEvent> campusEvents = [
@@ -292,6 +328,7 @@ class _CMRConnectAppState extends State<CMRConnectApp> {
         AppRoutes.timetable: (_) => const TimetableScreen(),
         AppRoutes.services: (_) => const ServicesScreen(),
         AppRoutes.events: (_) => const EventsScreen(),
+        AppRoutes.announcements: (_) => const AnnouncementsScreen(),
         AppRoutes.profile: (_) => ProfileScreen(
           isDarkMode: themeMode == ThemeMode.dark,
           onThemeChanged: toggleTheme,
@@ -430,6 +467,11 @@ class CMRConnectDrawer extends StatelessWidget {
                     icon: Icons.event_outlined,
                     title: 'Campus Events',
                     onTap: () => _navigate(context, AppRoutes.events),
+                  ),
+                  _DrawerItem(
+                    icon: Icons.campaign_outlined,
+                    title: 'Announcements',
+                    onTap: () => _navigate(context, AppRoutes.announcements),
                   ),
                   const Divider(indent: 16, endIndent: 16),
                   _DrawerItem(
@@ -892,6 +934,105 @@ class DashboardCard extends StatelessWidget {
 // TIMETABLE
 // ============================================================
 
+class AnnouncementsScreen extends StatefulWidget {
+  const AnnouncementsScreen({super.key});
+
+  @override
+  State<AnnouncementsScreen> createState() => _AnnouncementsScreenState();
+}
+
+class _AnnouncementsScreenState extends State<AnnouncementsScreen> {
+  final Set<String> bookmarkedIds = <String>{};
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: const CMRConnectDrawer(),
+      appBar: AppBar(title: const Text('Announcements')),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: campusAnnouncements.length,
+        itemBuilder: (context, index) {
+          final item = campusAnnouncements[index];
+          final saved = bookmarkedIds.contains(item.id);
+          return Card(
+            elevation: 0,
+            margin: const EdgeInsets.only(bottom: 12),
+            child: ListTile(
+              contentPadding: const EdgeInsets.all(14),
+              leading: CircleAvatar(
+                backgroundColor: CMRConnectApp.primary.withValues(alpha: .10),
+                child: Icon(item.icon, color: CMRConnectApp.primary),
+              ),
+              title: Text(item.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text('${item.category} • ${item.date}\n${item.preview}'),
+              ),
+              isThreeLine: true,
+              trailing: IconButton(
+                tooltip: saved ? 'Remove bookmark' : 'Bookmark',
+                icon: Icon(saved ? Icons.bookmark : Icons.bookmark_border),
+                onPressed: () => setState(() {
+                  if (saved) {
+                    bookmarkedIds.remove(item.id);
+                  } else {
+                    bookmarkedIds.add(item.id);
+                  }
+                }),
+              ),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AnnouncementDetailScreen(item: item),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class AnnouncementDetailScreen extends StatelessWidget {
+  final Announcement item;
+
+  const AnnouncementDetailScreen({super.key, required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Announcement Details')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 30,
+              backgroundColor: CMRConnectApp.primary.withValues(alpha: .10),
+              child: Icon(item.icon, color: CMRConnectApp.primary, size: 30),
+            ),
+            const SizedBox(height: 18),
+            Text(item.title, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            Text('${item.category} • ${item.date}',
+                style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+            const Divider(height: 30),
+            Text(item.detail, style: const TextStyle(fontSize: 16, height: 1.6)),
+            const SizedBox(height: 20),
+            const Text(
+              'Note: This is fictional demonstration content for the lab.',
+              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class TimetableScreen extends StatelessWidget {
   const TimetableScreen({super.key});
 
@@ -958,55 +1099,66 @@ class ServicesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const CMRConnectDrawer(),
-      appBar: AppBar(
-        title: const Text('Campus Services'),
-      ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: campusServices.length,
-        separatorBuilder: (_, _) => const SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          final service = campusServices[index];
-
-          return Card(
-            elevation: 0,
-            child: ListTile(
-              contentPadding: const EdgeInsets.all(14),
-              leading: CircleAvatar(
-                radius: 27,
-                backgroundColor: service.color.withValues(alpha: .12),
-                child: Icon(
-                  service.icon,
-                  color: service.color,
-                ),
-              ),
-              title: Text(
-                service.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              subtitle: Text(
-                '${service.location}\n${service.description}',
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                size: 14,
-              ),
-              isThreeLine: true,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ServiceDetailScreen(
-                      service: service,
+      appBar: AppBar(title: const Text('Campus Services')),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final columns = constraints.maxWidth >= 700 ? 4
+              : constraints.maxWidth >= 420 ? 3 : 2;
+          return GridView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: campusServices.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columns,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: constraints.maxWidth < 420 ? 0.9 : 1.05,
+            ),
+            itemBuilder: (context, index) {
+              final service = campusServices[index];
+              return Card(
+                elevation: 0,
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ServiceDetailScreen(service: service),
                     ),
                   ),
-                );
-              },
-            ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 27,
+                          backgroundColor: service.color.withValues(alpha: .12),
+                          child: Icon(service.icon, color: service.color, size: 28),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          service.name,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Tap to view details',
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Theme.of(context).textTheme.bodySmall?.color,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),
